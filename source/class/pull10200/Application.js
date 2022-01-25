@@ -52,6 +52,13 @@ qx.Class.define("pull10200.Application",
         Below is your actual application code...
       -------------------------------------------------------------------------
       */
+      function makeSelectBox(){
+        var box = new qx.ui.form.SelectBox();
+        for (var i=0; i<50; i++) {
+          box.add(new qx.ui.form.ListItem("Free text", "@MaterialIcons/text_fields/12"));
+        }
+        return box;
+      }
 
       // Create a button
       var button1 = new qx.ui.form.Button("Click me", "pull10200/test.png");
@@ -64,8 +71,26 @@ qx.Class.define("pull10200.Application",
 
       // Add an event listener
       button1.addListener("execute", function() {
+        for(var i=0; i<3; i++){
+          mainSelect.setSelection([mainSelect.getChildren()[i]]);
+        }
+      });
+
+      var mainSelect = makeSelectBox();
+      doc.add(mainSelect, {left: 100, top: 100});
+
+      var vBox = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      doc.add(vBox, { left: 100, top: 130 });
+      // Add an event listener
+      mainSelect.addListener("changeSelection", ()=>{
+        var startTime = performance.now()
+        vBox.removeAll();
         /* eslint no-alert: "off" */
-        alert("Hello World!");
+        for (let i = 0; i < 20; i++) {
+          vBox.add(makeSelectBox());
+        }
+        var endTime = performance.now();
+        alert(endTime - startTime);
       });
     }
   }
